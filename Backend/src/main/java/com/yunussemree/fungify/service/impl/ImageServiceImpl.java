@@ -1,16 +1,9 @@
 package com.yunussemree.fungify.service.impl;
 
 import com.yunussemree.fungify.service.IImageService;
-import com.yunussemree.fungify.entity.Image;
-import com.yunussemree.fungify.utils.api.ApiResponse;
-import com.yunussemree.fungify.utils.exceptions.ImageException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.stereotype.Service;
-
-import javax.sql.rowset.serial.SerialBlob;
-import java.io.IOException;
-import java.sql.SQLException;
 
 
 @Service
