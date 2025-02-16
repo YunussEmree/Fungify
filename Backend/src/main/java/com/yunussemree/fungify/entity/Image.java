@@ -1,4 +1,4 @@
-package com.yunussemree.fungify.image;
+package com.yunussemree.fungify.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;

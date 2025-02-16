@@ -1,8 +1,8 @@
-package com.yunussemree.fungify.image;
+package com.yunussemree.fungify.service;
 
 import org.springframework.web.multipart.MultipartFile;
 
-public interface IService {
+public interface IImageService {
 
     Object upload(MultipartFile file);
 }
