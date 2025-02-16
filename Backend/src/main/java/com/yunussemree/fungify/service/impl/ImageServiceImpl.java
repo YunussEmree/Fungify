@@ -1,13 +1,11 @@
 package com.yunussemree.fungify.service.impl;
 
 import com.yunussemree.fungify.service.IImageService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.stereotype.Service;
 
 
 @Service
-@RequiredArgsConstructor
 public class ImageServiceImpl implements IImageService {
     @Override
     public Object upload(MultipartFile file) {
