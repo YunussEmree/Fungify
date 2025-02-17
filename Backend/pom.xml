@@ -62,7 +62,8 @@
 		<dependency>
 			<groupId>org.pytorch</groupId>
 			<artifactId>pytorch_java_only</artifactId>
-			<version>1.13.0</version>
+			<version>2.1.0</version>
+			<scope>provided</scope>
 		</dependency>
 
 	</dependencies>
