@@ -1,7 +1,5 @@
-package com.yunussemree.fungify.service.impl;
+package com.yunussemree.fungify.fungy;
 
-import com.yunussemree.fungify.entity.Fungy;
-import com.yunussemree.fungify.service.IFungyService;
 import org.springframework.stereotype.Service;
 
 import java.sql.*;

@@ -59,6 +59,12 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.pytorch</groupId>
+			<artifactId>pytorch_java_only</artifactId>
+			<version>1.13.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

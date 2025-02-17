@@ -1,4 +1,4 @@
-package com.yunussemree.fungify.entity;
+package com.yunussemree.fungify.fungy;
 
 import lombok.*;
 
