@@ -59,11 +59,21 @@
 			<scope>provided</scope>
 		</dependency>
 
+
 		<dependency>
-			<groupId>org.pytorch</groupId>
-			<artifactId>pytorch_java_only</artifactId>
-			<version>2.1.0</version>
-			<scope>provided</scope>
+			<groupId>ai.djl.pytorch</groupId>
+			<artifactId>pytorch-engine</artifactId>
+			<version>0.28.0</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.djl</groupId>
+			<artifactId>api</artifactId>
+			<version>0.28.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.7.36</version>
 		</dependency>
 
 	</dependencies>

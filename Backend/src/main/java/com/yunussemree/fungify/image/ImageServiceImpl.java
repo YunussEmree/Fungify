@@ -1,8 +1,17 @@
 package com.yunussemree.fungify.image;
 
-import org.pytorch.IValue;
-import org.pytorch.Module;
-import org.pytorch.Tensor;
+import java.nio.file.*;
+import java.awt.image.*;
+import ai.djl.*;
+import ai.djl.inference.*;
+import ai.djl.modality.*;
+import ai.djl.modality.cv.*;
+import ai.djl.modality.cv.util.*;
+import ai.djl.modality.cv.transform.*;
+import ai.djl.modality.cv.translator.*;
+import ai.djl.repository.zoo.*;
+import ai.djl.translate.*;
+import ai.djl.training.util.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.stereotype.Service;
 
@@ -14,21 +23,21 @@ import java.nio.ByteOrder;
 @Service
 public class ImageServiceImpl implements IImageService {
     private final String modelPath = "../AI Model/model.pt";
-    private final org.pytorch.Module model = Module.load(modelPath);
 
     @Override
     public float[] predict(MultipartFile file) throws IOException {
         float[] imageData = convertMultipartFileToFloatArray(file);
 
-        Tensor inputTensor = Tensor.fromBlob(imageData, new long[]{1, 3, 128, 128});
-        Tensor outputTensor = model.forward(IValue.from(inputTensor)).toTensor();
 
-        float[] result = outputTensor.getDataAsFloatArray();
+        Criteria<image, classifications=""> criteria = Criteria.builder()
+                .setTypes(Image.class, Classifications.class)
+                .optModelPath(Paths.get("build/pytorch_models/resnet18"))
+                .optOption("mapLocation", "true") // this model requires mapLocation for GPU
+                .optTranslator(translator)
+                .optProgress(new ProgressBar()).build();
 
-        for(float score : result) { //TODO:??
-            System.out.println(score);
-        }
-        return result;
+        ZooModel model = criteria.loadModel();
+
     }
 
     public static float[] convertMultipartFileToFloatArray(MultipartFile file) throws IOException {
