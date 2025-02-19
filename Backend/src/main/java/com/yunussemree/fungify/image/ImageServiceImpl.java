@@ -29,7 +29,7 @@ public class ImageServiceImpl implements IImageService {
         float[] imageData = convertMultipartFileToFloatArray(file);
 
 
-        Criteria<image, classifications=""> criteria = Criteria.builder()
+        /*Criteria<image, classifications=""> criteria = Criteria.builder()
                 .setTypes(Image.class, Classifications.class)
                 .optModelPath(Paths.get("build/pytorch_models/resnet18"))
                 .optOption("mapLocation", "true") // this model requires mapLocation for GPU
@@ -37,6 +37,9 @@ public class ImageServiceImpl implements IImageService {
                 .optProgress(new ProgressBar()).build();
 
         ZooModel model = criteria.loadModel();
+
+         */
+        return null;
 
     }
 
