@@ -1,11 +1,32 @@
-# Fungify
-Within the scope of "2209-B University Students Research Projects Support Programme for Industry", our project on "Mobile application that classifies mushrooms as consumable or non-consumable with artificial intelligence", which we prepared on behalf of @Burdur Mehmet Akif Ersoy University Bucak Computer and Informatics Faculty in the 2nd semester of 2023, has been entitled to be supported.
+# Fungify (Tübitak 2209-B Project)
+
+## What is Tübitak 2209-B Project?
+Typically, projects under this program can last up to 12 months, and the funding amount is defined in the program guidelines. By participating in TÜBİTAK 2209-B, students get a valuable opportunity to gain hands-on research experience, work closely with industry professionals, and contribute innovative solutions to industrial challenges.
 <br>
-In this project, an artificial intelligence model will be produced with kaggle data sets using mobilenetv2-autoencoder, a deep learning algorithm, and this artificial intelligence model will be integrated into a mobile application written in flutter. With this mobile application, the image taken from the user will be interpreted by the artificial intelligence model and this interpretation will be presented to the user.
-<br>
-In addition, this project will be interpreted by a mushroom expert and then optimised by our team.
-<br>
-The project is planned to be completed in 2025 at the latest.
+
+## What is This Project?
+The project's objective is to create a mobile application that utilizes artificial intelligence to classify mushrooms as consumable or non-consumable. This initiative is affiliated with Burdur Mehmet Akif Ersoy University's Bucak Computer and Informatics Faculty during the second semester of 2023.
+
+## Which Technologies used?
++ Backend
+  + Java Deep Library for running Pytorch model in java
+  + Spring Boot
+  + Spring Boot Web for web application
+  + Lombok for more clean code
+  + JDBC for access to database
++ Database
+  + SQLite 
++ Mobile Application
+  + Dart
+  + Flutter
++ AI
+  + PyTorch
+  + MobileNetV2-autoencoder algorithm
+  + Numpy
+  + Seaborn
++ Others
+  + Docker for prevent the some environment problems
+  + Postman is used for tests
 
 
 # To Do List
