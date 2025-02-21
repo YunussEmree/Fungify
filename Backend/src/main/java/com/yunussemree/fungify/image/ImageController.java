@@ -3,6 +3,7 @@ package com.yunussemree.fungify.image;
 import ai.djl.modality.Classifications;
 import com.yunussemree.fungify.fungy.IFungyService;
 import com.yunussemree.fungify.utils.api.ApiResponse;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,8 +21,13 @@ public class ImageController {
 
     @PostMapping("/upload")
     public ApiResponse uploadImage(@RequestParam MultipartFile image) {
+        if (image == null || image.isEmpty()) {
+            return ResponseEntity.badRequest().body(new ApiResponse("File is missing", null)).getBody();
+        }
+
+
         try {
-            Classifications prediction = imageService.predict(image);
+            String prediction = imageService.predict(image);
             return new ApiResponse("Prediction successful", prediction);
         } catch (Exception e) {
             System.out.println("An error occured in prediction : " + e.getMessage());

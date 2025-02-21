@@ -7,5 +7,5 @@ import java.io.IOException;
 
 public interface IImageService {
 
-    Classifications predict(MultipartFile file) throws IOException;
+    String predict(MultipartFile file) throws IOException;
 }
