@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
-class CameraScreen extends StatelessWidget {
-  const CameraScreen({super.key});
+class CameraPage extends StatelessWidget {
+  const CameraPage({super.key});
 
   Future<void> _takePhoto(BuildContext context) async {
     final ImagePicker picker = ImagePicker();
@@ -13,7 +13,7 @@ class CameraScreen extends StatelessWidget {
         imageQuality: 80,
         preferredCameraDevice: CameraDevice.rear,
       );
-      
+
       if (photo != null && context.mounted) {
         // Burada çekilen fotoğraf ile yapılacak işlemler eklenecek
         debugPrint('Çekilen fotoğraf: ${photo.path}');
@@ -157,7 +157,8 @@ class CameraScreen extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () => _takePhoto(context),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF8B6BFF).withOpacity(0.2),
+                        backgroundColor:
+                            const Color(0xFF8B6BFF).withOpacity(0.2),
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 30,
@@ -185,4 +186,4 @@ class CameraScreen extends StatelessWidget {
       ),
     );
   }
-} 
+}
