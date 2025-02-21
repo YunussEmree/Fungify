@@ -19,7 +19,7 @@ public class ImageController {
     }
 
     @PostMapping("/upload")
-    public ApiResponse uploadImage(@RequestBody MultipartFile image) {
+    public ApiResponse uploadImage(@RequestParam MultipartFile image) {
         try {
             Classifications prediction = imageService.predict(image);
             return new ApiResponse("Prediction successful", prediction);
