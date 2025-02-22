@@ -11,7 +11,7 @@ The project's objective is to create a mobile application that utilizes artifici
 + Backend
   + Java Deep Library for running Pytorch model in java
   + Spring Boot
-  + Spring Boot Web for web application
+  + Spring Boot Web for web applisad  cation
   + Lombok for more clean code
   + JDBC for access to database
 + Database
