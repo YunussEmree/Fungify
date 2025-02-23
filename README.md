@@ -35,7 +35,7 @@ The project's objective is to create a mobile application that utilizes artifici
 [✔] Preparing data set <br>
 [✔] Training ai model <br>
 [✔] Preparing sqllite database <br>
-[X] Coding mobile app <br>
+[✔] Coding mobile app <br>
 [✔] Coding web service <br>
 [X] Optimizations  <br>
 [X] Ai model improvements <br>
