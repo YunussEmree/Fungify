@@ -18,18 +18,18 @@ class GradientContainer extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            const Color(0xFF3D1B7A).withAlpha(153), // 0.6 opacity
-            const Color(0xFF2A0E5F).withAlpha(77), // 0.3 opacity
+            const Color(0xFF3D1B7A).withAlpha(153),
+            const Color(0xFF2A0E5F).withAlpha(77),
           ],
         ),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: const Color(0xFF8B6BFF).withAlpha(77), // 0.3 opacity
+          color: const Color(0xFF8B6BFF).withAlpha(77),
           width: 1.5,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withAlpha(77), // 0.3 opacity
+            color: Colors.black.withAlpha(77),
             blurRadius: 15,
             spreadRadius: 2,
           ),

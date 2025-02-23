@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:fungi_app/shared/constants/app_colors.dart';
 
 class AlertDialogWidget extends StatelessWidget {
   const AlertDialogWidget(
@@ -14,11 +15,11 @@ class AlertDialogWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: const Color(0xFF2A0E5F),
+      backgroundColor: AppColors.primary,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
         side: BorderSide(
-          color: Color.fromARGB(77, 139, 107, 255), // 0.3 * 255 ≈ 77 for alpha
+          color: AppColors.accentWithOpacity,
           width: 1,
         ),
       ),
@@ -32,7 +33,7 @@ class AlertDialogWidget extends StatelessWidget {
       content: Text(
         subtitle,
         style: GoogleFonts.poppins(
-          color: Color.fromARGB(230, 255, 255, 255), // 0.9 * 255 ≈ 230 for alpha
+          color: AppColors.whiteWithOpacity,
         ),
       ),
       actions: [
@@ -44,7 +45,7 @@ class AlertDialogWidget extends StatelessWidget {
           child: Text(
             action,
             style: GoogleFonts.poppins(
-              color: const Color(0xFFFF6BE6),
+              color: AppColors.highlight,
               fontWeight: FontWeight.bold,
             ),
           ),

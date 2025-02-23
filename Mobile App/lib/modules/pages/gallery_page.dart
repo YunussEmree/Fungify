@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:fungi_app/modules/main_controller.dart';
-import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:fungi_app/modules/widgets/fungy_detail_dialog.dart';
 import 'package:fungi_app/modules/widgets/gradient_container.dart';
+import 'package:fungi_app/shared/constants/app_colors.dart';
+import 'package:fungi_app/shared/constants/app_text_styles.dart';
+import 'package:get/get.dart';
 
-/// Galeri ekranı widget'ı
-/// Kullanıcının galeriden fotoğraf seçmesini ve API'ye göndermesini sağlar
 class GalleryPage extends StatelessWidget {
   const GalleryPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF2A0E5F),
+      backgroundColor: AppColors.primary,
       appBar: _buildAppBar(),
       body: _buildBody(),
     );
@@ -22,14 +22,11 @@ class GalleryPage extends StatelessWidget {
     return AppBar(
       title: Text(
         'Select from Gallery',
-        style: GoogleFonts.poppins(
-          color: Colors.white,
-          fontWeight: FontWeight.w500,
-        ),
+        style: AppTextStyles.button.copyWith(color: AppColors.white),
       ),
       backgroundColor: Colors.transparent,
       elevation: 0,
-      iconTheme: const IconThemeData(color: Colors.white),
+      iconTheme: const IconThemeData(color: AppColors.white),
     );
   }
 
@@ -67,16 +64,16 @@ class GalleryPage extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            const Color(0xFF8B6BFF).withAlpha(77), // 0.3 opacity
-            const Color(0xFFFF6BE6).withAlpha(77), // 0.3 opacity
+            AppColors.accentWithOpacity,
+            AppColors.highlightWithOpacity,
           ],
         ),
         shape: BoxShape.circle,
       ),
-      child: const Icon(
+      child: Icon(
         Icons.photo_library_rounded,
         size: 80,
-        color: Color(0xFFFF6BE6),
+        color: AppColors.highlight,
       ),
     );
   }
@@ -84,20 +81,16 @@ class GalleryPage extends StatelessWidget {
   Widget _buildInstructionText() {
     return Text(
       'Select a photo from gallery',
-      style: GoogleFonts.poppins(
-        color: const Color.fromARGB(230, 255, 255, 255),
-        fontSize: 18,
-        letterSpacing: 0.3,
-      ),
+      style: AppTextStyles.body.copyWith(fontSize: 18),
     );
   }
 
   Widget _buildSelectButton() {
     return ElevatedButton(
-      onPressed: () => Get.find<MainController>().pickImage(Get.context!),
+      onPressed: () => _selectAndProcessImage(Get.context!),
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color.fromARGB(51, 139, 107, 255),
-        foregroundColor: Colors.white,
+        backgroundColor: AppColors.accent.withAlpha(51),
+        foregroundColor: AppColors.white,
         padding: const EdgeInsets.symmetric(
           horizontal: 30,
           vertical: 15,
@@ -109,11 +102,18 @@ class GalleryPage extends StatelessWidget {
       ),
       child: Text(
         'Select Photo',
-        style: GoogleFonts.poppins(
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
-        ),
+        style: AppTextStyles.button,
       ),
     );
+  }
+
+  Future<void> _selectAndProcessImage(BuildContext context) async {
+    final result = await Get.find<MainController>().pickImage(context);
+    if (result != null && context.mounted) {
+      Get.dialog(
+        FungyDetailDialog(fungy: result),
+        barrierDismissible: false,
+      );
+    }
   }
 }

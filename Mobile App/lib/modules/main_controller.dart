@@ -1,7 +1,8 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:fungi_app/models/fungy.dart';
 import 'package:fungi_app/modules/widgets/alert_dialog_widget.dart';
+import 'package:fungi_app/modules/widgets/error_dialog.dart';
 import 'package:fungi_app/shared/constants/strings.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -14,7 +15,7 @@ class MainController extends GetxController {
   /// Seçilen fotoğrafı API'ye gönderen fonksiyon
   /// [imagePath]: Seçilen fotoğrafın dosya yolu
   /// [context]: BuildContext nesnesi
-  Future<void> _sendImageToAPI(String imagePath, BuildContext context) async {
+  Future<Fungy?> _sendImageToAPI(String imagePath, BuildContext context) async {
     try {
       debugPrint('Sending API request to: $apiUrl');
 
@@ -28,97 +29,84 @@ class MainController extends GetxController {
       debugPrint('API response code: ${response.statusCode}');
       debugPrint('API response: ${response.body}');
 
-      if (!context.mounted) return;
+      if (!context.mounted) return null;
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         try {
-          final result = jsonDecode(response.body);
-          if (context.mounted) {
-            showSuccessDialog(context, result);
+          final jsonResponse = json.decode(utf8.decode(response.bodyBytes));
+          if (jsonResponse['data'] != null) {
+            return Fungy.fromJson(jsonResponse['data']);
           }
         } catch (e) {
           debugPrint('JSON parse error: $e');
-          if (context.mounted) {
-            showSuccessDialog(context, {'message': response.body});
-          }
+          _showErrorDialog('JSON ayrıştırma hatası: $e');
         }
       } else {
         throw Exception(
-          'API failed to respond: ${response.statusCode}\nResponse: ${response.body}',
+          'API yanıt vermedi: ${response.statusCode}\nYanıt: ${response.body}',
         );
       }
     } catch (e) {
       debugPrint('Error: $e');
       if (context.mounted) {
-        showErrorDialog(context, e.toString());
+        _showErrorDialog(e.toString());
       }
     }
+    return null;
   }
 
   /// Başarılı işlem sonrası gösterilen dialog
-  void showSuccessDialog(BuildContext context, Map<String, dynamic> result) {
+  void showSuccessDialog(Map<String, dynamic> result) {
     String displayMessage = '';
-    
-    // API yanıtındaki tüm alanları göster
     result.forEach((key, value) {
       displayMessage += '$key: $value\n';
     });
-
-    // Son satırdaki fazla \n karakterini kaldır
     displayMessage = displayMessage.trimRight();
 
     Get.dialog(
       AlertDialogWidget(
-        action: AppStrings.OK,
+        action: AppStrings.ok,
         subtitle: displayMessage,
-        title: AppStrings.SUCCESS,
+        title: AppStrings.success,
       ),
       barrierDismissible: false,
     );
   }
 
   /// Hata durumunda gösterilen dialog
-  void showErrorDialog(BuildContext context, String errorMessage) {
+  void _showErrorDialog(String message) {
     Get.dialog(
-      AlertDialogWidget(
-        action: AppStrings.OK,
-        subtitle: errorMessage,
-        title: AppStrings.ERROR,
-      ),
+      ErrorDialog(message: message),
       barrierDismissible: false,
     );
   }
 
   /// Galeriden fotoğraf seçme işlemini başlatan fonksiyon
-  Future<void> pickImage(BuildContext context, {String? imagePath}) async {
+  Future<Fungy?> pickImage(BuildContext context, {String? imagePath}) async {
     try {
       if (imagePath != null) {
         if (context.mounted) {
-          await _sendImageToAPI(imagePath, context);
+          return await _sendImageToAPI(imagePath, context);
         }
       } else {
         final ImagePicker picker = ImagePicker();
         final XFile? image = await picker.pickImage(
           source: ImageSource.gallery,
-          imageQuality: 80,
+          imageQuality: 50,
+          maxWidth: 1024,
+          maxHeight: 1024,
         );
 
         if (image != null && context.mounted) {
-          await _sendImageToAPI(image.path, context);
+          return await _sendImageToAPI(image.path, context);
         }
       }
     } catch (e) {
-      debugPrint('${AppStrings.ERROR}: $e');
+      debugPrint('Error: $e');
       if (context.mounted) {
-        Get.dialog(
-          AlertDialogWidget(
-            action: AppStrings.OK,
-            subtitle: AppStrings.ERRORTAKINGPHOTO,
-            title: AppStrings.ERROR,
-          ),
-          barrierDismissible: false,
-        );
+        _showErrorDialog('Bir hata oluştu: $e');
       }
     }
+    return null;
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fungi_app/routes/app_pages.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:fungi_app/shared/constants/app_colors.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({super.key});
@@ -9,7 +10,7 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF2A0E5F),
+      backgroundColor: AppColors.primary,
       body: SafeArea(
         child: Column(
           children: [
@@ -42,14 +43,14 @@ class MainPage extends StatelessWidget {
           style: GoogleFonts.spaceMono(
             fontSize: 34,
             fontWeight: FontWeight.bold,
-            color: const Color(0xFF8B6BFF),
+            color: AppColors.accent,
             letterSpacing: 1,
           ),
         ),
         const SizedBox(width: 8),
         const Icon(
           Icons.eco_rounded,
-          color: Color(0xFFFF6BE6),
+          color: AppColors.highlight,
           size: 32,
         ),
       ],
@@ -66,14 +67,14 @@ class MainPage extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              const Color(0xFF3D1B7A).withAlpha(153), // 0.6 opacity
-              const Color(0xFF2A0E5F).withAlpha(77), // 0.3 opacity
+              AppColors.secondaryWithOpacity,
+              AppColors.primaryWithOpacity,
             ],
           ),
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withAlpha(77), // 0.3 opacity
+              color: AppColors.blackWithOpacity,
               blurRadius: 15,
               spreadRadius: 2,
             ),
@@ -99,18 +100,18 @@ class MainPage extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            const Color(0xFF8B6BFF).withAlpha(77), // 0.3 opacity
-            const Color(0xFFFF6BE6).withAlpha(77), // 0.3 opacity
+            AppColors.accentWithOpacity,
+            AppColors.highlightWithOpacity,
           ],
         ),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: const Color(0xFF8B6BFF).withAlpha(77), // 0.3 opacity
+          color: AppColors.accentWithOpacity,
           width: 2,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withAlpha(51), // 0.2 opacity
+            color: AppColors.blackWithOpacity,
             blurRadius: 10,
             spreadRadius: 1,
           ),
@@ -136,13 +137,13 @@ class MainPage extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            const Color(0xFF8B6BFF).withAlpha(51), // 0.2 opacity
-            const Color(0xFFFF6BE6).withAlpha(51), // 0.2 opacity
+            AppColors.accentWithOpacity,
+            AppColors.highlightWithOpacity,
           ],
         ),
         borderRadius: BorderRadius.circular(15),
         border: Border.all(
-          color: const Color(0xFF8B6BFF).withAlpha(77), // 0.3 opacity
+          color: AppColors.accentWithOpacity,
           width: 1,
         ),
       ),
@@ -150,7 +151,7 @@ class MainPage extends StatelessWidget {
         children: [
           const Icon(
             Icons.camera_enhance_rounded,
-            color: Color(0xFFFF6BE6),
+            color: AppColors.highlight,
             size: 32,
           ),
           const SizedBox(height: 12),
@@ -158,7 +159,7 @@ class MainPage extends StatelessWidget {
             'Click the camera icon to start\nclassifying with camera.',
             textAlign: TextAlign.center,
             style: GoogleFonts.poppins(
-              color: const Color.fromARGB(230, 255, 255, 255),
+              color: AppColors.whiteWithOpacity,
               fontSize: 16,
               height: 1.5,
               letterSpacing: 0.3,
@@ -177,8 +178,8 @@ class MainPage extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            const Color(0xFF3D1B7A).withAlpha(153), // 0.6 opacity
-            const Color(0xFF2A0E5F).withAlpha(77), // 0.3 opacity
+            AppColors.secondaryWithOpacity,
+            AppColors.primaryWithOpacity,
           ],
         ),
         borderRadius: const BorderRadius.only(
@@ -187,7 +188,7 @@ class MainPage extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withAlpha(77), // 0.3 opacity
+            color: AppColors.blackWithOpacity,
             blurRadius: 15,
             offset: const Offset(0, -5),
           ),
@@ -220,18 +221,18 @@ class MainPage extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            const Color(0xFF8B6BFF).withAlpha(77), // 0.3 opacity
-            const Color(0xFFFF6BE6).withAlpha(77), // 0.3 opacity
+            AppColors.accentWithOpacity,
+            AppColors.highlightWithOpacity,
           ],
         ),
         shape: BoxShape.circle,
         border: Border.all(
-          color: const Color(0xFF8B6BFF).withAlpha(77), // 0.3 opacity
+          color: AppColors.accentWithOpacity,
           width: 1.5,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withAlpha(51), // 0.2 opacity
+            color: AppColors.blackWithOpacity,
             blurRadius: 10,
             spreadRadius: 1,
           ),
@@ -242,13 +243,13 @@ class MainPage extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(30),
           onTap: onPressed,
-          splashColor: const Color(0xFF8B6BFF).withAlpha(51), // 0.2 opacity
-          highlightColor: const Color(0xFFFF6BE6).withAlpha(51), // 0.2 opacity
+          splashColor: AppColors.accentWithOpacity,
+          highlightColor: AppColors.highlightWithOpacity,
           child: Container(
             padding: const EdgeInsets.all(18),
             child: Icon(
               icon,
-              color: const Color.fromARGB(230, 255, 255, 255),
+              color: AppColors.whiteWithOpacity,
               size: 30,
             ),
           ),
