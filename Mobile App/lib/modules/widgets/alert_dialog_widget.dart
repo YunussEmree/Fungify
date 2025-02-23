@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:fungi_app/shared/constants/app_colors.dart';
+import 'package:fungi_app/shared/constants/app_text_styles.dart';
+import 'package:get/get.dart';
 
 class AlertDialogWidget extends StatelessWidget {
-  const AlertDialogWidget(
-      {super.key,
-      required this.action,
-      required this.subtitle,
-      required this.title});
   final String title;
-  final String subtitle;
-  final String action;
+  final String message;
+  final String buttonText;
+  final VoidCallback? onPressed;
+  final bool closeOnPressed;
+
+  const AlertDialogWidget({
+    super.key,
+    required this.title,
+    required this.message,
+    this.buttonText = 'Tamam',
+    this.onPressed,
+    this.closeOnPressed = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,34 +27,27 @@ class AlertDialogWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
         side: BorderSide(
           color: AppColors.accentWithOpacity,
-          width: 1,
         ),
       ),
       title: Text(
         title,
-        style: GoogleFonts.poppins(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-        ),
+        style: AppTextStyles.button.copyWith(color: AppColors.white),
       ),
       content: Text(
-        subtitle,
-        style: GoogleFonts.poppins(
-          color: AppColors.whiteWithOpacity,
-        ),
+        message,
+        style: AppTextStyles.body,
       ),
       actions: [
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop(); // Dialog'u kapat
-            Navigator.of(context).pop(); // Galeri ekranını kapat
+            if (closeOnPressed) {
+              Get.back();
+            }
+            onPressed?.call();
           },
           child: Text(
-            action,
-            style: GoogleFonts.poppins(
-              color: AppColors.highlight,
-              fontWeight: FontWeight.bold,
-            ),
+            buttonText,
+            style: AppTextStyles.button.copyWith(color: AppColors.highlight),
           ),
         ),
       ],

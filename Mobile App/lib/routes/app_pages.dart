@@ -8,26 +8,25 @@ import 'package:get/get.dart';
 part 'app_routes.dart';
 
 class AppPages {
-  static const INITIAL = Routes.MAINPAGE;
+  static const initial = Routes.mainpage;
 
   static final List<GetPage<dynamic>> routes = <GetPage>[
-    // Auth Routes
     GetPage(
-      name: Routes.MAINPAGE,
+      name: Routes.mainpage,
       page: () => MainPage(),
       binding: MainBinding(),
     ),
     GetPage(
-      name: Routes.CAMERAPAGE,
+      name: Routes.camerapage,
       page: () => CameraPage(),
       binding: MainBinding(),
     ),
     GetPage(
-      name: Routes.GALLERYPAGE,
+      name: Routes.gallerypage,
       page: () => GalleryPage(),
     ),
     GetPage(
-      name: Routes.SEARCHPAGE,
+      name: Routes.searchpage,
       page: () => SearchPage(),
     ),
   ];

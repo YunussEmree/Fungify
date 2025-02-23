@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:fungi_app/shared/constants/app_colors.dart';
 
 class MainContent extends StatelessWidget {
   const MainContent({super.key});
@@ -14,14 +15,14 @@ class MainContent extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            const Color(0xFF3D1B7A).withAlpha(153),
-            const Color(0xFF2A0E5F).withAlpha(77),
+            AppColors.primaryWithOpacity,
+            AppColors.primaryWithOpacity,
           ],
         ),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withAlpha(77),
+            color: AppColors.blackWithOpacity,
             blurRadius: 15,
             spreadRadius: 2,
           ),
@@ -46,18 +47,18 @@ class MainContent extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            const Color(0xFF8B6BFF).withAlpha(77),
-            const Color(0xFFFF6BE6).withAlpha(77),
+            AppColors.accentWithOpacity,
+            AppColors.highlightWithOpacity,
           ],
         ),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: const Color(0xFF8B6BFF).withAlpha(77),
+          color: AppColors.accentWithOpacity,
           width: 2,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withAlpha(51),
+            color: AppColors.blackWithOpacity,
             blurRadius: 10,
             spreadRadius: 1,
           ),
@@ -83,13 +84,13 @@ class MainContent extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            const Color(0xFF8B6BFF).withAlpha(51),
-            const Color(0xFFFF6BE6).withAlpha(51),
-          ],
+            AppColors.accentWithOpacity,
+            AppColors.highlightWithOpacity,
+          ],  
         ),
         borderRadius: BorderRadius.circular(15),
         border: Border.all(
-          color: const Color(0xFF8B6BFF).withAlpha(77),
+          color: AppColors.accentWithOpacity,
           width: 1,
         ),
       ),
@@ -97,15 +98,15 @@ class MainContent extends StatelessWidget {
         children: [
           const Icon(
             Icons.camera_enhance_rounded,
-            color: Color(0xFFFF6BE6), 
+            color: AppColors.highlight, 
             size: 32,
           ),
           const SizedBox(height: 12),
           Text(
-            'Kamera ile sınıflandırmaya başlamak için\nkamera ikonuna tıklayınız.',
+            'Click the camera icon to start classification.',
             textAlign: TextAlign.center,
             style: GoogleFonts.poppins(
-              color: Colors.white.withAlpha(230),
+              color: AppColors.whiteWithOpacity,
               fontSize: 16,
               height: 1.5,
               letterSpacing: 0.3,

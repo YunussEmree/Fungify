@@ -11,7 +11,7 @@ class AppHeader extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          'Fungi',
+          'Fung',
           style: GoogleFonts.spaceMono(
             fontSize: 34,
             fontWeight: FontWeight.bold,
@@ -20,7 +20,7 @@ class AppHeader extends StatelessWidget {
           ),
         ),
         Text(
-          'App',
+          'ify',
           style: GoogleFonts.spaceMono(
             fontSize: 34,
             fontWeight: FontWeight.bold,

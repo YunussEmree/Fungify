@@ -37,15 +37,15 @@ class BottomNavigation extends StatelessWidget {
         children: [
           CustomIconButton(
             icon: Icons.photo_library_rounded,
-            onPressed: () => Get.toNamed(Routes.GALLERYPAGE),
+            onPressed: () => Get.toNamed(Routes.gallerypage),
           ),
           CustomIconButton(
             icon: Icons.camera_alt_outlined,
-            onPressed: () => Get.toNamed(Routes.CAMERAPAGE),
+            onPressed: () => Get.toNamed(Routes.camerapage),
           ),
           CustomIconButton(
             icon: Icons.search_outlined,
-            onPressed: () => Get.toNamed(Routes.SEARCHPAGE),
+            onPressed: () => Get.toNamed(Routes.searchpage),
           ),
         ],
       ),

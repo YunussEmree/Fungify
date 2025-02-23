@@ -14,19 +14,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'FungiApp',
+      title: 'Fungify',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color(0xFF2A0E5F),
           primary: const Color(0xFF2A0E5F),
           secondary: const Color(0xFF8B6BFF),
           tertiary: const Color(0xFFFF6BE6),
-          background: const Color(0xFF2A0E5F),
+          surface: const Color(0xFF2A0E5F),
         ),
         useMaterial3: true,
         textTheme: GoogleFonts.poppinsTextTheme(),
       ),
-      initialRoute: AppPages.INITIAL,
+      initialRoute: AppPages.initial,
       getPages: AppPages.routes,
     );
   }

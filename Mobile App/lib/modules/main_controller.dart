@@ -3,18 +3,90 @@ import 'package:flutter/material.dart';
 import 'package:fungi_app/models/fungy.dart';
 import 'package:fungi_app/modules/widgets/alert_dialog_widget.dart';
 import 'package:fungi_app/modules/widgets/error_dialog.dart';
+import 'package:fungi_app/modules/widgets/fungy_detail_dialog.dart';
 import 'package:fungi_app/shared/constants/strings.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 
 class MainController extends GetxController {
-  // API endpoint'i - Kendi IP adresinizi buraya yazın
-  static const String apiUrl = 'http://192.168.8.5:8080/api/v1/image/upload';
+  static const String baseUrl = 'http://192.168.8.5:8080/api/v1';
+  static const String apiUrl = '$baseUrl/image/upload';
+  final ImagePicker _picker = ImagePicker();
 
-  /// Seçilen fotoğrafı API'ye gönderen fonksiyon
-  /// [imagePath]: Seçilen fotoğrafın dosya yolu
-  /// [context]: BuildContext nesnesi
+  // Image Service Methods
+  Future<void> takePhoto() async {
+    try {
+      final XFile? photo = await _picker.pickImage(
+        source: ImageSource.camera,
+        imageQuality: 50,
+        maxWidth: 1024,
+        maxHeight: 1024,
+        preferredCameraDevice: CameraDevice.rear,
+      );
+
+      if (photo != null) {
+        debugPrint('Captured photo: ${photo.path}');
+        final result = await pickImage(Get.context!, imagePath: photo.path);
+        if (result != null) {
+          Get.dialog(
+            FungyDetailDialog(fungy: result),
+            barrierDismissible: false,
+          );
+        }
+      }
+    } catch (e) {
+      debugPrint('Error: $e');
+      _showErrorDialog(AppStrings.errortakingphoto);
+    }
+  }
+
+  Future<void> selectAndProcessImage() async {
+    final result = await pickImage(Get.context!);
+    if (result != null) {
+      Get.dialog(
+        FungyDetailDialog(fungy: result),
+        barrierDismissible: false,
+      );
+    }
+  }
+
+  // Fungy Service Methods
+  Future<void> getFungyDetails(String name, Function(bool) setLoading) async {
+    setLoading(true);
+
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/image/find/$name'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Accept': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final jsonResponse = json.decode(utf8.decode(response.bodyBytes));
+        if (jsonResponse['data'] != null) {
+          final fungy = Fungy.fromJson(jsonResponse['data']);
+          Get.dialog(
+            FungyDetailDialog(
+              fungy: fungy,
+              showProbability: false,
+            ),
+            barrierDismissible: false,
+          );
+        }
+      } else {
+        _showErrorDialog(AppStrings.mushroomDetailsNotFound);
+      }
+    } catch (e) {
+      _showErrorDialog('${AppStrings.generalError} $e');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // Helper Methods
   Future<Fungy?> _sendImageToAPI(String imagePath, BuildContext context) async {
     try {
       debugPrint('Sending API request to: $apiUrl');
@@ -39,11 +111,11 @@ class MainController extends GetxController {
           }
         } catch (e) {
           debugPrint('JSON parse error: $e');
-          _showErrorDialog('JSON ayrıştırma hatası: $e');
+          _showErrorDialog('${AppStrings.jsonParseError} $e');
         }
       } else {
         throw Exception(
-          'API yanıt vermedi: ${response.statusCode}\nYanıt: ${response.body}',
+          '${AppStrings.apiError} ${response.statusCode}\nYanıt: ${response.body}',
         );
       }
     } catch (e) {
@@ -55,7 +127,6 @@ class MainController extends GetxController {
     return null;
   }
 
-  /// Başarılı işlem sonrası gösterilen dialog
   void showSuccessDialog(Map<String, dynamic> result) {
     String displayMessage = '';
     result.forEach((key, value) {
@@ -65,15 +136,14 @@ class MainController extends GetxController {
 
     Get.dialog(
       AlertDialogWidget(
-        action: AppStrings.ok,
-        subtitle: displayMessage,
         title: AppStrings.success,
+        message: displayMessage,
+        buttonText: AppStrings.ok,
       ),
       barrierDismissible: false,
     );
   }
 
-  /// Hata durumunda gösterilen dialog
   void _showErrorDialog(String message) {
     Get.dialog(
       ErrorDialog(message: message),
@@ -81,7 +151,6 @@ class MainController extends GetxController {
     );
   }
 
-  /// Galeriden fotoğraf seçme işlemini başlatan fonksiyon
   Future<Fungy?> pickImage(BuildContext context, {String? imagePath}) async {
     try {
       if (imagePath != null) {
@@ -89,8 +158,7 @@ class MainController extends GetxController {
           return await _sendImageToAPI(imagePath, context);
         }
       } else {
-        final ImagePicker picker = ImagePicker();
-        final XFile? image = await picker.pickImage(
+        final XFile? image = await _picker.pickImage(
           source: ImageSource.gallery,
           imageQuality: 50,
           maxWidth: 1024,
@@ -104,7 +172,7 @@ class MainController extends GetxController {
     } catch (e) {
       debugPrint('Error: $e');
       if (context.mounted) {
-        _showErrorDialog('Bir hata oluştu: $e');
+        _showErrorDialog('${AppStrings.generalError} $e');
       }
     }
     return null;

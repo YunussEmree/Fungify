@@ -7,10 +7,12 @@ import 'package:get/get.dart';
 
 class FungyDetailDialog extends StatelessWidget {
   final Fungy fungy;
+  final bool showProbability;
 
   const FungyDetailDialog({
     super.key,
     required this.fungy,
+    this.showProbability = true,
   });
 
   @override
@@ -48,7 +50,8 @@ class FungyDetailDialog extends StatelessWidget {
               const SizedBox(height: 20),
               _buildDetailRow('İsim:', fungy.name),
               _buildDetailRow('Zehirli:', fungy.venomous ? 'Evet' : 'Hayır'),
-              _buildDetailRow('Doğruluk:', '${fungy.probability.toStringAsFixed(2)}%'),
+              if (showProbability)
+                _buildDetailRow('Doğruluk:', '${fungy.probability.toStringAsFixed(2)}%'),
               _buildDetailRow('Açıklama:', fungy.fungyDescription),
               const SizedBox(height: 20),
               Center(

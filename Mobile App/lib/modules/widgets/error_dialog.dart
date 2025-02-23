@@ -18,7 +18,7 @@ class ErrorDialog extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
         side: BorderSide(
-          color: AppColors.accent.withAlpha(77),
+          color: AppColors.accentWithOpacity,
         ),
       ),
       title: Text(
