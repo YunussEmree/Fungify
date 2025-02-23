@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fungi_app/modules/pages/camera_page.dart';
-import 'package:fungi_app/modules/pages/gallery_page.dart';
-import 'package:fungi_app/modules/pages/search_page.dart';
 import 'package:fungi_app/routes/app_pages.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';

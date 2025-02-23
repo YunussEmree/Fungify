@@ -18,7 +18,7 @@ class AlertDialogWidget extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
         side: BorderSide(
-          color: const Color(0xFF8B6BFF).withOpacity(0.3),
+          color: Color.fromARGB(77, 139, 107, 255), // 0.3 * 255 ≈ 77 for alpha
           width: 1,
         ),
       ),
@@ -32,7 +32,7 @@ class AlertDialogWidget extends StatelessWidget {
       content: Text(
         subtitle,
         style: GoogleFonts.poppins(
-          color: Colors.white.withOpacity(0.9),
+          color: Color.fromARGB(230, 255, 255, 255), // 0.9 * 255 ≈ 230 for alpha
         ),
       ),
       actions: [

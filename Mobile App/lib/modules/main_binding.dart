@@ -4,6 +4,6 @@ import 'package:get/get.dart';
 class MainBinding implements Bindings {
   @override
   void dependencies() async {
-    var c = Get.put(MainController());
+    Get.put(MainController());
   }
 }
