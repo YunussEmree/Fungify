@@ -9,6 +9,7 @@ import lombok.*;
 public class Fungy {
     private Long id;
     private String name;
+    private double probability;
     private boolean venomous;
     private String fungyImageUrl;
     private String fungyDescription;

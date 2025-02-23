@@ -8,6 +8,8 @@ import ai.djl.modality.*;
 import ai.djl.modality.cv.*;
 import ai.djl.repository.zoo.*;
 import ai.djl.translate.*;
+import com.yunussemree.fungify.fungy.Fungy;
+import com.yunussemree.fungify.fungy.IFungyService;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.stereotype.Service;
 
@@ -16,12 +18,24 @@ import java.io.IOException;
 
 @Service
 public class ImageServiceImpl implements IImageService {
+
+    IFungyService fungyService;
+
+    public ImageServiceImpl(IFungyService fungyService) {
+        this.fungyService = fungyService;
+    }
+
+
+
     @Override
-    public String predict(MultipartFile file) throws IOException {
+    public Fungy predict(MultipartFile file) throws IOException {
         // Path to the directory or file where the model is stored (e.g. TorchScript file)
+
         String modelDir = "../AI Model/modelcpu.pt";
 
+        Fungy fungy;
         Image image;
+
         try{
             InputStream inputStream = file.getInputStream();
             image = ImageFactory.getInstance().fromInputStream(inputStream);
@@ -52,10 +66,17 @@ public class ImageServiceImpl implements IImageService {
             result = predictor.predict(image);
             System.out.println("Model result: " + result.toString());
 
+            Classifications.Classification bestResult = result.best();
+            System.out.println("Best class: " + bestResult.getClassName());
+            System.out.println("Probability: " + bestResult.getProbability());
+
+            fungy = fungyService.findByMushroomName(bestResult.getClassName());
+            fungy.setProbability(bestResult.getProbability());
+
         } catch (ModelNotFoundException | MalformedModelException | TranslateException e) {
             System.out.println("An error occured when loading the model : " + e.getMessage());
             throw new RuntimeException(e);
         }
-        return result.toJson();
+        return fungy;
     }
 }

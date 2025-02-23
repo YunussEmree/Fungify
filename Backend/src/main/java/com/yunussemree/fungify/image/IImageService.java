@@ -1,11 +1,11 @@
 package com.yunussemree.fungify.image;
 
-import ai.djl.modality.Classifications;
+import com.yunussemree.fungify.fungy.Fungy;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
 public interface IImageService {
 
-    String predict(MultipartFile file) throws IOException;
+    Fungy predict(MultipartFile file) throws IOException;
 }

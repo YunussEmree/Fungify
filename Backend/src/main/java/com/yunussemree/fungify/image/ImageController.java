@@ -1,6 +1,6 @@
 package com.yunussemree.fungify.image;
 
-import ai.djl.modality.Classifications;
+import com.yunussemree.fungify.fungy.Fungy;
 import com.yunussemree.fungify.fungy.IFungyService;
 import com.yunussemree.fungify.utils.api.ApiResponse;
 import org.springframework.http.ResponseEntity;
@@ -21,13 +21,12 @@ public class ImageController {
 
     @PostMapping("/upload")
     public ApiResponse uploadImage(@RequestParam MultipartFile image) {
-        if (image == null || image.isEmpty()) {
+        if (image.isEmpty()) {
             return ResponseEntity.badRequest().body(new ApiResponse("File is missing", null)).getBody();
         }
 
-
         try {
-            String prediction = imageService.predict(image);
+            Fungy prediction = imageService.predict(image);
             return new ApiResponse("Prediction successful", prediction);
         } catch (Exception e) {
             System.out.println("An error occured in prediction : " + e.getMessage());
