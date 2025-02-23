@@ -27,6 +27,12 @@ The project's objective is to create a mobile application that utilizes artifici
 + Others
   + Docker for prevent the some environment problems
   + Postman is used for tests
+ 
+# Mobil App Showcase
+![Fungify_camera](https://github.com/user-attachments/assets/20de8f19-9fb8-4579-9578-75d42e2ed05c)
+![Fungify_search](https://github.com/user-attachments/assets/00b59651-6323-4daf-8e61-87818790e166)
+![Fungify_main](https://github.com/user-attachments/assets/b186f686-fa2f-4921-9bd6-01a96197150e)
+![Fungify_gallery](https://github.com/user-attachments/assets/cd855d5e-61f7-4cfe-9c47-7f0b49991d3f)
 
 
 # To Do List
