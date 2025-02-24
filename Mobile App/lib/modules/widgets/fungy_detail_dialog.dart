@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:fungi_app/models/fungy.dart';
-import 'package:fungi_app/modules/widgets/gradient_container.dart';
-import 'package:fungi_app/shared/constants/app_colors.dart';
-import 'package:fungi_app/shared/constants/app_text_styles.dart';
+import 'package:fungify/models/fungy.dart';
+import 'package:fungify/modules/widgets/gradient_container.dart';
+import 'package:fungify/shared/constants/app_colors.dart';
+import 'package:fungify/shared/constants/app_text_styles.dart';
 import 'package:get/get.dart';
 
 class FungyDetailDialog extends StatelessWidget {

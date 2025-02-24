@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fungi_app/routes/app_pages.dart';
+import 'package:fungify/routes/app_pages.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 

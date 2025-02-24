@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fungi_app/shared/constants/app_colors.dart';
+import 'package:fungify/shared/constants/app_colors.dart';
 
 class PageContent extends StatelessWidget {
   final Widget child;

@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:fungi_app/models/fungy.dart';
-import 'package:fungi_app/modules/widgets/alert_dialog_widget.dart';
-import 'package:fungi_app/modules/widgets/error_dialog.dart';
-import 'package:fungi_app/modules/widgets/fungy_detail_dialog.dart';
-import 'package:fungi_app/shared/constants/strings.dart';
+import 'package:fungify/models/fungy.dart';
+import 'package:fungify/modules/widgets/alert_dialog_widget.dart';
+import 'package:fungify/modules/widgets/error_dialog.dart';
+import 'package:fungify/modules/widgets/fungy_detail_dialog.dart';
+import 'package:fungify/shared/constants/strings.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fungi_app/modules/widgets/loading_indicator.dart';
-import 'package:fungi_app/modules/widgets/search_field.dart';
-import 'package:fungi_app/modules/widgets/mushroom_list_item.dart';
+import 'package:fungify/modules/widgets/loading_indicator.dart';
+import 'package:fungify/modules/widgets/search_field.dart';
+import 'package:fungify/modules/widgets/mushroom_list_item.dart';
 
 class SearchContent extends StatelessWidget {
   final TextEditingController searchController;

@@ -1,8 +1,8 @@
-import 'package:fungi_app/modules/main_binding.dart';
-import 'package:fungi_app/modules/main_page.dart';
-import 'package:fungi_app/modules/pages/camera_page.dart';
-import 'package:fungi_app/modules/pages/gallery_page.dart';
-import 'package:fungi_app/modules/pages/search_page.dart';
+import 'package:fungify/modules/main_binding.dart';
+import 'package:fungify/modules/main_page.dart';
+import 'package:fungify/modules/pages/camera_page.dart';
+import 'package:fungify/modules/pages/gallery_page.dart';
+import 'package:fungify/modules/pages/search_page.dart';
 import 'package:get/get.dart';
 
 part 'app_routes.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fungi_app/shared/constants/app_colors.dart';
-import 'package:fungi_app/shared/constants/app_text_styles.dart';
-import 'package:fungi_app/shared/constants/app_colors.dart';
+import 'package:fungify/shared/constants/app_colors.dart';
+import 'package:fungify/shared/constants/app_text_styles.dart';
+import 'package:fungify/shared/constants/app_colors.dart';
 
 
 class MushroomListItem extends StatelessWidget {

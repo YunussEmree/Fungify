@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:fungi_app/modules/widgets/custom_icon_button.dart';
-import 'package:fungi_app/routes/app_pages.dart';
+import 'package:fungify/modules/widgets/custom_icon_button.dart';
+import 'package:fungify/routes/app_pages.dart';
 import 'package:get/get.dart';
-import 'package:fungi_app/shared/constants/app_colors.dart';
+import 'package:fungify/shared/constants/app_colors.dart';
 
 class BottomNavigation extends StatelessWidget {
   const BottomNavigation({super.key});

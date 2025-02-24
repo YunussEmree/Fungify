@@ -1,4 +1,4 @@
-package com.example.fungi_app
+package com.example.fungify
 
 import io.flutter.embedding.android.FlutterActivity
 

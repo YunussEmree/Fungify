@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:fungi_app/shared/constants/app_colors.dart';
+import 'package:fungify/shared/constants/app_colors.dart';
 
 class AppTextStyles {
   static final TextStyle title = GoogleFonts.spaceMono(

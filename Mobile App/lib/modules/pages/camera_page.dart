@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:fungi_app/modules/widgets/gradient_container.dart';
-import 'package:fungi_app/shared/constants/app_colors.dart';
-import 'package:fungi_app/shared/constants/app_text_styles.dart';
-import 'package:fungi_app/shared/constants/strings.dart';
-import 'package:fungi_app/modules/widgets/custom_app_bar.dart';
-import 'package:fungi_app/modules/widgets/circular_gradient_icon.dart';
-import 'package:fungi_app/modules/widgets/gradient_button.dart';
-import 'package:fungi_app/modules/main_controller.dart';
+import 'package:fungify/modules/widgets/gradient_container.dart';
+import 'package:fungify/shared/constants/app_colors.dart';
+import 'package:fungify/shared/constants/app_text_styles.dart';
+import 'package:fungify/shared/constants/strings.dart';
+import 'package:fungify/modules/widgets/custom_app_bar.dart';
+import 'package:fungify/modules/widgets/circular_gradient_icon.dart';
+import 'package:fungify/modules/widgets/gradient_button.dart';
+import 'package:fungify/modules/main_controller.dart';
 import 'package:get/get.dart';
 
 class CameraPage extends StatelessWidget {

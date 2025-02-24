@@ -1,4 +1,4 @@
-# fungi_app
+# fungify
 
 A new Flutter project.
 

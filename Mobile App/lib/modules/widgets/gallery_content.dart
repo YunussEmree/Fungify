@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:fungi_app/modules/widgets/circular_gradient_icon.dart';
-import 'package:fungi_app/modules/widgets/gradient_button.dart';
-import 'package:fungi_app/shared/constants/app_text_styles.dart';
-import 'package:fungi_app/shared/constants/strings.dart';
+import 'package:fungify/modules/widgets/circular_gradient_icon.dart';
+import 'package:fungify/modules/widgets/gradient_button.dart';
+import 'package:fungify/shared/constants/app_text_styles.dart';
+import 'package:fungify/shared/constants/strings.dart';
 
 class GalleryContent extends StatelessWidget {
   final VoidCallback onSelectPhoto;

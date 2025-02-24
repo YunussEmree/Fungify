@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fungi_app/modules/widgets/custom_app_bar.dart';
-import 'package:fungi_app/modules/widgets/page_content.dart';
-import 'package:fungi_app/modules/widgets/search_content.dart';
-import 'package:fungi_app/pipes/search_pipe.dart';
-import 'package:fungi_app/modules/main_controller.dart';
+import 'package:fungify/modules/widgets/custom_app_bar.dart';
+import 'package:fungify/modules/widgets/page_content.dart';
+import 'package:fungify/modules/widgets/search_content.dart';
+import 'package:fungify/pipes/search_pipe.dart';
+import 'package:fungify/modules/main_controller.dart';
 import 'package:get/get.dart';
 
 class SearchPage extends StatefulWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fungi_app/modules/widgets/app_header.dart';
-import 'package:fungi_app/modules/widgets/bottom_navigation.dart';
-import 'package:fungi_app/modules/widgets/main_content.dart';
+import 'package:fungify/modules/widgets/app_header.dart';
+import 'package:fungify/modules/widgets/bottom_navigation.dart';
+import 'package:fungify/modules/widgets/main_content.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({super.key});
