@@ -14,6 +14,29 @@ class MainController extends GetxController {
   static const String apiUrl = '$baseUrl/image/upload';
   final ImagePicker _picker = ImagePicker();
 
+  String _formatImageUrl(String url) {
+    if (url.isEmpty) return url;
+    
+    debugPrint('Original URL: $url');
+    
+    // URL'yi temizle
+    url = url.replaceAll('https://', '');
+    url = url.replaceAll('http://', '');
+    
+    // GitHub raw URL düzenleme
+    if (url.contains('github.com')) {
+      url = url.replaceAll('github.com', 'raw.githubusercontent.com');
+      url = url.replaceAll('/blob/', '/');
+    }
+    
+    // URL'deki boşlukları ve özel karakterleri encode et
+    url = url.replaceAll(' ', '%20');
+    final encodedUrl = 'https://$url';
+    debugPrint('Formatted URL: $encodedUrl');
+    
+    return encodedUrl;
+  }
+
   // Image Service Methods
   Future<void> takePhoto() async {
     try {
@@ -29,6 +52,8 @@ class MainController extends GetxController {
         debugPrint('Captured photo: ${photo.path}');
         final result = await pickImage(Get.context!, imagePath: photo.path);
         if (result != null) {
+          result.fungyImageUrl = _formatImageUrl(result.fungyImageUrl);
+          debugPrint('Final Image URL: ${result.fungyImageUrl}');
           Get.dialog(
             FungyDetailDialog(fungy: result),
             barrierDismissible: false,
@@ -44,6 +69,8 @@ class MainController extends GetxController {
   Future<void> selectAndProcessImage() async {
     final result = await pickImage(Get.context!);
     if (result != null) {
+      result.fungyImageUrl = _formatImageUrl(result.fungyImageUrl);
+      debugPrint('Final Image URL: ${result.fungyImageUrl}');
       Get.dialog(
         FungyDetailDialog(fungy: result),
         barrierDismissible: false,
@@ -66,8 +93,11 @@ class MainController extends GetxController {
 
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(utf8.decode(response.bodyBytes));
+        debugPrint('API Response: $jsonResponse');
         if (jsonResponse['data'] != null) {
           final fungy = Fungy.fromJson(jsonResponse['data']);
+          fungy.fungyImageUrl = _formatImageUrl(fungy.fungyImageUrl);
+          debugPrint('Final Image URL: ${fungy.fungyImageUrl}');
           Get.dialog(
             FungyDetailDialog(
               fungy: fungy,
@@ -80,6 +110,7 @@ class MainController extends GetxController {
         _showErrorDialog(AppStrings.mushroomDetailsNotFound);
       }
     } catch (e) {
+      debugPrint('Error in getFungyDetails: $e');
       _showErrorDialog('${AppStrings.generalError} $e');
     } finally {
       setLoading(false);
@@ -106,8 +137,12 @@ class MainController extends GetxController {
       if (response.statusCode == 200 || response.statusCode == 201) {
         try {
           final jsonResponse = json.decode(utf8.decode(response.bodyBytes));
+          debugPrint('API Response: $jsonResponse');
           if (jsonResponse['data'] != null) {
-            return Fungy.fromJson(jsonResponse['data']);
+            final fungy = Fungy.fromJson(jsonResponse['data']);
+            fungy.fungyImageUrl = _formatImageUrl(fungy.fungyImageUrl);
+            debugPrint('Final Image URL: ${fungy.fungyImageUrl}');
+            return fungy;
           }
         } catch (e) {
           debugPrint('JSON parse error: $e');
@@ -119,7 +154,7 @@ class MainController extends GetxController {
         );
       }
     } catch (e) {
-      debugPrint('Error: $e');
+      debugPrint('Error in _sendImageToAPI: $e');
       if (context.mounted) {
         _showErrorDialog(e.toString());
       }
@@ -170,7 +205,7 @@ class MainController extends GetxController {
         }
       }
     } catch (e) {
-      debugPrint('Error: $e');
+      debugPrint('Error in pickImage: $e');
       if (context.mounted) {
         _showErrorDialog('${AppStrings.generalError} $e');
       }

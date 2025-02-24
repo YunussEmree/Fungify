@@ -3,7 +3,7 @@ class Fungy {
   final String name;
   final double probability;
   final bool venomous;
-  final String fungyImageUrl;
+  String fungyImageUrl;
   final String fungyDescription;
 
   Fungy({

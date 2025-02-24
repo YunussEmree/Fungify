@@ -4,6 +4,7 @@ import 'package:fungify/modules/widgets/gradient_container.dart';
 import 'package:fungify/shared/constants/app_colors.dart';
 import 'package:fungify/shared/constants/app_text_styles.dart';
 import 'package:get/get.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class FungyDetailDialog extends StatelessWidget {
   final Fungy fungy;
@@ -29,19 +30,42 @@ class FungyDetailDialog extends StatelessWidget {
                 Center(
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(15),
-                    child: Image.network(
-                      fungy.fungyImageUrl,
+                    child: CachedNetworkImage(
+                      imageUrl: fungy.fungyImageUrl,
                       height: 200,
                       width: 200,
                       fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => Container(
+                      placeholder: (context, url) => Container(
                         height: 200,
                         width: 200,
                         color: AppColors.grey.withAlpha(77),
-                        child: const Icon(
-                          Icons.error_outline,
-                          color: AppColors.white,
-                          size: 40,
+                        child: const Center(
+                          child: CircularProgressIndicator(
+                            color: AppColors.highlight,
+                          ),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        height: 200,
+                        width: 200,
+                        color: AppColors.grey.withAlpha(77),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.error_outline,
+                              color: AppColors.white,
+                              size: 40,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Resim yüklenemedi',
+                              style: AppTextStyles.body.copyWith(
+                                fontSize: 12,
+                                color: AppColors.white,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
