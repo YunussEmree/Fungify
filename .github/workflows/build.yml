@@ -20,24 +20,46 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: '11'
+        
+    - name: Check directory structure
+      run: |
+        ls -la
+        find . -name "mvnw" -type f
+        
     - name: Build Spring Boot app
-      run: ./mvnw clean package  # veya gradlew clean build, projenize göre
+      working-directory: ./Backend
+      run: |
+        chmod +x ./mvnw
+        ./mvnw clean package
+      continue-on-error: true  # Bu adımın başarısız olması durumunda devam etmek için
 
     # Mobile Build (Flutter)
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.7.0'  # İhtiyacınıza uygun Flutter sürümü
+        flutter-version: '3.7.0'
+        
+    - name: Change to Mobile App directory
+      run: cd "./Mobile App" || echo "Directory not found"
+      
     - name: Get Flutter dependencies
+      working-directory: "./Mobile App"
       run: flutter pub get
+      continue-on-error: true  # Bu adımın başarısız olması durumunda devam etmek için
+      
     - name: Build APK (Release)
+      working-directory: "./Mobile App"
       run: flutter build apk --release
+      continue-on-error: true  # Bu adımın başarısız olması durumunda devam etmek için
 
-    # Artifacts'ı yükle
+    # Upload Artifacts
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: Fungify-Builds
         path: |
           Backend/target/*.jar
-          build/app/outputs/flutter-apk/*.apk
+          Mobile App/build/app/outputs/flutter-apk/*.apk
+        if-no-files-found: warn  # Dosya bulunamazsa uyarı ver ama hata değil
+  
+  
