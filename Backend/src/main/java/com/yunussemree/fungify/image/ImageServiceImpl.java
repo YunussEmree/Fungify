@@ -29,8 +29,6 @@ public class ImageServiceImpl implements IImageService {
 
     @Override
     public Fungy predict(MultipartFile file) throws IOException {
-        // Path to the directory or file where the model is stored (e.g. TorchScript file)
-
         String modelDir = "../AI Model/modelcpu.pt";
 
         Fungy fungy;
@@ -47,7 +45,6 @@ public class ImageServiceImpl implements IImageService {
 
         Classifications result;
 
-        // Create criteria to load model
         Criteria<Image, Classifications> criteria = Criteria.builder()
                 .setTypes(Image.class, Classifications.class)
                 .optModelPath(Paths.get(modelDir))
@@ -55,14 +52,10 @@ public class ImageServiceImpl implements IImageService {
                 .optDevice(Device.cpu()) // Device you want to use (e.g. CPU or GPU)
                 .build();
 
-        // Load model and create predictor
         System.out.println("Model is loading...");
         try (ZooModel<Image, Classifications> model = criteria.loadModel();
              Predictor<Image, Classifications> predictor = model.newPredictor()) {
 
-            // Prepare your input data: for example, load an image
-
-            // Run the model to get the prediction
             result = predictor.predict(image);
             System.out.println("Model result: " + result.toString());
 

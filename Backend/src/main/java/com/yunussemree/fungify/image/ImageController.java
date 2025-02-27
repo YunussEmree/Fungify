@@ -2,15 +2,14 @@ package com.yunussemree.fungify.image;
 
 import com.yunussemree.fungify.fungy.Fungy;
 import com.yunussemree.fungify.fungy.IFungyService;
-import com.yunussemree.fungify.utils.api.ApiResponse;
-import com.yunussemree.fungify.utils.exceptions.ImageException;
+import com.yunussemree.fungify.util.api.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("${api.prefix}/image")
-@CrossOrigin(origins = "*") // CORS için gerekli
+@CrossOrigin(origins = "*")
 public class ImageController {
 
     private final IImageService imageService;

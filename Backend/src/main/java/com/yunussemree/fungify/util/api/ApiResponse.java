@@ -1,4 +1,4 @@
-package com.yunussemree.fungify.utils.api;
+package com.yunussemree.fungify.util.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
