@@ -1,0 +1,122 @@
+name: Release Fungify
+
+on:
+  push:
+    tags:
+      - 'v*' # v1.0.0 gibi tag'leri yakala
+
+jobs:
+  build:
+    name: Build Artifacts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Backend Build (Spring Boot)
+      - name: Setup Java environment
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          
+      - name: Build Spring Boot app
+        run: |
+          if [ -d "Backend" ] && [ -f "Backend/mvnw" ]; then
+            cd Backend
+            chmod +x ./mvnw
+            export MAVEN_OPTS="-Dmaven.wagon.http.timeout=300000 -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.retryHandler.count=3"
+            ./mvnw clean package -B
+          fi
+        timeout-minutes: 10
+
+      # Mobile Build (Flutter)
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.0'
+          channel: 'stable'
+          
+      - name: Get Flutter dependencies
+        run: |
+          if [ -d "Mobile App" ] && [ -f "Mobile App/pubspec.yaml" ]; then
+            cd "Mobile App"
+            flutter pub get
+          fi
+          
+      - name: Build Flutter APK
+        run: |
+          if [ -d "Mobile App" ] && [ -f "Mobile App/pubspec.yaml" ]; then
+            cd "Mobile App"
+            flutter build apk --release
+          fi
+
+      # Save artifacts for the release job
+      - name: Upload Backend artifact for release
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-jar
+          path: Backend/target/*.jar
+          if-no-files-found: warn
+          
+      - name: Upload Flutter APK artifact for release
+        uses: actions/upload-artifact@v4
+        with:
+          name: flutter-apk
+          path: Mobile App/build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: warn
+
+  release:
+    name: Create Release
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          
+      - name: List downloaded artifacts
+        run: |
+          ls -R artifacts/
+          
+      # Sürüm numarasını tag'den çıkar (v1.0.0 -> 1.0.0)
+      - name: Get version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+          
+      # Release tarihini al
+      - name: Get current date
+        id: date
+        run: echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+        
+      # JAR dosyasını yeniden adlandır
+      - name: Rename JAR file
+        run: |
+          find artifacts/backend-jar -name "*.jar" -type f -exec mv {} artifacts/Fungify-${{ steps.get_version.outputs.VERSION }}.jar \;
+      
+      # APK dosyasını yeniden adlandır
+      - name: Rename APK file
+        run: |
+          find artifacts/flutter-apk -name "*.apk" -type f -exec mv {} artifacts/Fungify-${{ steps.get_version.outputs.VERSION }}.apk \;
+      
+      # Release oluştur ve dosyaları ekle
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Fungify ${{ steps.get_version.outputs.VERSION }}
+          body: |
+            ## Fungify Sürüm ${{ steps.get_version.outputs.VERSION }}
+            Yayınlanma Tarihi: ${{ steps.date.outputs.DATE }}
+            
+            ### İndirme Bağlantıları
+            - [Android APK](https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/Fungify-${{ steps.get_version.outputs.VERSION }}.apk)
+            - [Backend JAR](https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/Fungify-${{ steps.get_version.outputs.VERSION }}.jar)
+            
+            ### Sürüm Notları
+            Bu sürüm, Fungify projesinin otomatik oluşturulmuş bir yayınıdır.
+          files: |
+            artifacts/Fungify-${{ steps.get_version.outputs.VERSION }}.jar
+            artifacts/Fungify-${{ steps.get_version.outputs.VERSION }}.apk
+          draft: false
+          prerelease: false 
