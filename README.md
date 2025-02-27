@@ -27,6 +27,7 @@ The project's objective is to create a mobile application that utilizes artifici
 + Others
   + Docker for prevent the some environment problems
   + Postman is used for tests
+  + Github Actions for CI/CD
  
 # Mobil App Showcase
 
@@ -44,6 +45,6 @@ The project's objective is to create a mobile application that utilizes artifici
 [✔] Preparing sqllite database <br>
 [✔] Coding mobile app <br>
 [✔] Coding web service <br>
-[X] Optimizations  <br>
+[✔] Optimizations  <br>
 [X] Ai model improvements <br>
 [X] Publishing app <br>
