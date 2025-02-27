@@ -14,52 +14,103 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    # Diagnostic - Show repository structure
+    - name: Show repository structure
+      run: |
+        ls -la
+        echo "Main directories:"
+        ls -la */
+        echo "Mobile App content:"
+        ls -la "Mobile App" || echo "Mobile App directory not found"
+
     # Backend Build (Spring Boot)
     - name: Setup Java environment
       uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
-        java-version: '11'
+        java-version: '17'
         
-    - name: Check directory structure
+    - name: Check Backend directory
       run: |
-        ls -la
+        echo "Backend directory content:"
+        ls -la Backend || echo "Backend directory not found"
         find . -name "mvnw" -type f
+        find . -name "pom.xml" -type f
         
     - name: Build Spring Boot app
-      working-directory: ./Backend
       run: |
-        chmod +x ./mvnw
-        ./mvnw clean package
-      continue-on-error: true  # Bu adımın başarısız olması durumunda devam etmek için
+        if [ -d "Backend" ] && [ -f "Backend/mvnw" ]; then
+          cd Backend
+          chmod +x ./mvnw
+          ./mvnw clean package
+        elif [ -f "mvnw" ]; then
+          chmod +x ./mvnw
+          ./mvnw clean package
+        else
+          echo "Cannot find mvnw file"
+          exit 1
+        fi
+      continue-on-error: true
 
     # Mobile Build (Flutter)
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.7.0'
+        flutter-version: '3.19.0'
+        channel: 'stable'
         
-    - name: Change to Mobile App directory
-      run: cd "./Mobile App" || echo "Directory not found"
-      
+    - name: Check Flutter installation
+      run: |
+        flutter --version
+        flutter doctor -v
+        
+    - name: Check Mobile App directory
+      run: |
+        echo "Mobile App directory content:"
+        ls -la "Mobile App" || echo "Mobile App directory not found"
+        find . -name "pubspec.yaml" -type f
+        
     - name: Get Flutter dependencies
-      working-directory: "./Mobile App"
-      run: flutter pub get
-      continue-on-error: true  # Bu adımın başarısız olması durumunda devam etmek için
+      run: |
+        if [ -d "Mobile App" ] && [ -f "Mobile App/pubspec.yaml" ]; then
+          cd "Mobile App"
+          flutter pub get
+        elif [ -f "pubspec.yaml" ]; then
+          flutter pub get
+        else
+          echo "Cannot find pubspec.yaml file"
+          exit 1
+        fi
+      continue-on-error: true
       
-    - name: Build APK (Release)
-      working-directory: "./Mobile App"
-      run: flutter build apk --release
-      continue-on-error: true  # Bu adımın başarısız olması durumunda devam etmek için
+    - name: Build Flutter APK
+      run: |
+        if [ -d "Mobile App" ] && [ -f "Mobile App/pubspec.yaml" ]; then
+          cd "Mobile App"
+          flutter build apk --debug # Debug modunda build edelim
+        elif [ -f "pubspec.yaml" ]; then
+          flutter build apk --debug
+        else
+          echo "Cannot find pubspec.yaml file"
+          exit 1
+        fi
+      continue-on-error: true
 
-    # Upload Artifacts
-    - name: Upload build artifacts
+    # Individual Artifacts Upload (separate for easier debugging)
+    - name: Upload Backend artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: Fungify-Builds
+        name: Backend-Jar
+        path: Backend/target/*.jar
+        if-no-files-found: warn
+        
+    - name: Upload Flutter APK artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: Flutter-APK
         path: |
-          Backend/target/*.jar
           Mobile App/build/app/outputs/flutter-apk/*.apk
-        if-no-files-found: warn  # Dosya bulunamazsa uyarı ver ama hata değil
+          build/app/outputs/flutter-apk/*.apk
+        if-no-files-found: warn
   
   
