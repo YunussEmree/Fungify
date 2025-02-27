@@ -9,7 +9,6 @@ class AppColors {
   static const Color black = Colors.black;
   static const Color grey = Colors.grey;
 
-  // Gradient colors
   static final Color primaryWithOpacity = secondary.withAlpha(153);
   static final Color secondaryWithOpacity = primary.withAlpha(77);
   static final Color accentWithOpacity = accent.withAlpha(77);

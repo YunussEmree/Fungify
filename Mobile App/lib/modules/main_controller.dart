@@ -8,33 +8,137 @@ import 'package:fungify/shared/constants/strings.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
+import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 
 class MainController extends GetxController {
   static const String baseUrl = 'http://192.168.8.5:8080/api/v1';
   static const String apiUrl = '$baseUrl/image/upload';
   final ImagePicker _picker = ImagePicker();
+  late final Dio _dio;
+  
+  @override
+  void onInit() {
+    super.onInit();
+    
+    final options = BaseOptions(
+      connectTimeout: const Duration(seconds: 30),
+      receiveTimeout: const Duration(seconds: 30),
+      headers: {
+        'User-Agent': 'Mozilla/5.0',
+        'Accept': '*/*',
+      },
+    );
+    
+    _dio = Dio(options);
+    
+    final cacheOptions = CacheOptions(
+      store: MemCacheStore(),
+      policy: CachePolicy.request,
+      hitCacheOnErrorExcept: [401, 403],
+      maxStale: const Duration(days: 1),
+      priority: CachePriority.normal,
+    );
+    
+    _dio.interceptors.add(DioCacheInterceptor(options: cacheOptions));
+  }
 
   String _formatImageUrl(String url) {
     if (url.isEmpty) return url;
     
     debugPrint('Original URL: $url');
     
-    // URL'yi temizle
-    url = url.replaceAll('https://', '');
-    url = url.replaceAll('http://', '');
-    
-    // GitHub raw URL düzenleme
-    if (url.contains('github.com')) {
-      url = url.replaceAll('github.com', 'raw.githubusercontent.com');
-      url = url.replaceAll('/blob/', '/');
+    try {
+      String decodedUrl = url
+          .replaceAll('&#x2F;', '/')
+          .replaceAll('&amp;', '&')
+          .replaceAll('&lt;', '<')
+          .replaceAll('&gt;', '>')
+          .replaceAll('&quot;', '"')
+          .replaceAll('&#x27;', "'")
+          .replaceAll('&#x5C;', '\\');
+      
+      decodedUrl = Uri.decodeFull(decodedUrl);
+      
+      if (decodedUrl.contains('github.com') && decodedUrl.contains('/blob/')) {
+        final parts = decodedUrl.split('github.com/');
+        if (parts.length < 2) return decodedUrl;
+        
+        final pathParts = parts[1].split('/blob/');
+        if (pathParts.length < 2) return decodedUrl;
+        
+        final repoPath = pathParts[0]; // YunussEmree/Fungify
+        final filePath = pathParts[1]; // main/Example Images/...
+        
+        String rawUrl = 'https://raw.githubusercontent.com/$repoPath/$filePath';
+        debugPrint('Formatted URL: $rawUrl');
+        return rawUrl;
+      }
+      
+      return decodedUrl;
+    } catch (e) {
+      debugPrint('URL format hatası: $e');
+      return url;
     }
-    
-    // URL'deki boşlukları ve özel karakterleri encode et
-    url = url.replaceAll(' ', '%20');
-    final encodedUrl = 'https://$url';
-    debugPrint('Formatted URL: $encodedUrl');
-    
-    return encodedUrl;
+  }
+  
+  Future<String> validateImageUrl(String imageUrl) async {
+    try {
+      String formattedUrl = _formatImageUrl(imageUrl);
+      
+      Uri uri;
+      try {
+        String noScheme = formattedUrl.replaceFirst(RegExp(r'^https?://'), '');
+        
+        final parts = noScheme.split('/');
+        if (parts.isEmpty) return imageUrl;
+        
+        final host = parts[0]; // raw.githubusercontent.com
+        final path = '/${parts.sublist(1).join('/')}'; // /YunussEmree/Fungify/...
+        
+        uri = Uri.https(host, path);
+        debugPrint('Validated URI: $uri');
+      } catch (e) {
+        debugPrint('URI oluşturma hatası: $e');
+        formattedUrl = formattedUrl
+            .replaceAll(' ', '%20')
+            .replaceAll('#', '%23')
+            .replaceAll('&', '%26');
+            
+        uri = Uri.parse(formattedUrl);
+      }
+      
+      try {
+        final response = await _dio.head(
+          uri.toString(),
+          options: Options(
+            followRedirects: true,
+            validateStatus: (status) => status != null && status < 400,
+          ),
+        );
+        
+        if (response.statusCode == 200) {
+          debugPrint('URL erişilebilir: ${uri.toString()}');
+          return uri.toString();
+        }
+      } catch (e) {
+        debugPrint('URL erişim hatası: $e');
+      }
+      
+      try {
+        if (imageUrl.contains('github.com')) {
+          final githubUrl = imageUrl.trim();
+          debugPrint('GitHub Raw URL stratejisi başarısız. Orijinal URL deneniyor: $githubUrl');
+          return githubUrl;
+        }
+      } catch (e) {
+        debugPrint('Alternatif URL denemesi başarısız: $e');
+      }
+      return imageUrl;
+    } catch (e) {
+      debugPrint('URL doğrulama hatası: $e');
+      return imageUrl;
+    }
   }
 
   // Image Service Methods
@@ -52,7 +156,7 @@ class MainController extends GetxController {
         debugPrint('Captured photo: ${photo.path}');
         final result = await pickImage(Get.context!, imagePath: photo.path);
         if (result != null) {
-          result.fungyImageUrl = _formatImageUrl(result.fungyImageUrl);
+          result.fungyImageUrl = await validateImageUrl(result.fungyImageUrl);
           debugPrint('Final Image URL: ${result.fungyImageUrl}');
           Get.dialog(
             FungyDetailDialog(fungy: result),
@@ -69,7 +173,7 @@ class MainController extends GetxController {
   Future<void> selectAndProcessImage() async {
     final result = await pickImage(Get.context!);
     if (result != null) {
-      result.fungyImageUrl = _formatImageUrl(result.fungyImageUrl);
+      result.fungyImageUrl = await validateImageUrl(result.fungyImageUrl);
       debugPrint('Final Image URL: ${result.fungyImageUrl}');
       Get.dialog(
         FungyDetailDialog(fungy: result),
@@ -78,7 +182,6 @@ class MainController extends GetxController {
     }
   }
 
-  // Fungy Service Methods
   Future<void> getFungyDetails(String name, Function(bool) setLoading) async {
     setLoading(true);
 
@@ -96,7 +199,10 @@ class MainController extends GetxController {
         debugPrint('API Response: $jsonResponse');
         if (jsonResponse['data'] != null) {
           final fungy = Fungy.fromJson(jsonResponse['data']);
-          fungy.fungyImageUrl = _formatImageUrl(fungy.fungyImageUrl);
+          
+          // URL doğrulama işlemi - validateImageUrl metodu ile URL'yi doğrula
+          fungy.fungyImageUrl = await validateImageUrl(fungy.fungyImageUrl);
+          
           debugPrint('Final Image URL: ${fungy.fungyImageUrl}');
           Get.dialog(
             FungyDetailDialog(
@@ -117,7 +223,6 @@ class MainController extends GetxController {
     }
   }
 
-  // Helper Methods
   Future<Fungy?> _sendImageToAPI(String imagePath, BuildContext context) async {
     try {
       debugPrint('Sending API request to: $apiUrl');
@@ -140,7 +245,9 @@ class MainController extends GetxController {
           debugPrint('API Response: $jsonResponse');
           if (jsonResponse['data'] != null) {
             final fungy = Fungy.fromJson(jsonResponse['data']);
-            fungy.fungyImageUrl = _formatImageUrl(fungy.fungyImageUrl);
+            
+            fungy.fungyImageUrl = await validateImageUrl(fungy.fungyImageUrl);
+            
             debugPrint('Final Image URL: ${fungy.fungyImageUrl}');
             return fungy;
           }

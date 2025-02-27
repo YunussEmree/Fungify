@@ -35,6 +35,20 @@ class FungyDetailDialog extends StatelessWidget {
                       height: 200,
                       width: 200,
                       fit: BoxFit.cover,
+                      httpHeaders: const {
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36',
+                        'Accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
+                        'Accept-Encoding': 'gzip, deflate, br',
+                        'Connection': 'keep-alive',
+                        'Cache-Control': 'max-age=0'
+                      },
+                      maxHeightDiskCache: 300,
+                      memCacheWidth: 300,
+                      fadeInDuration: const Duration(milliseconds: 300),
+                      cacheKey: fungy.fungyImageUrl.contains('github.com') 
+                          ? 'github-image-${fungy.id}-${DateTime.now().millisecondsSinceEpoch}'
+                          : null,
+                      useOldImageOnUrlChange: true,
                       placeholder: (context, url) => Container(
                         height: 200,
                         width: 200,
@@ -45,29 +59,39 @@ class FungyDetailDialog extends StatelessWidget {
                           ),
                         ),
                       ),
-                      errorWidget: (context, url, error) => Container(
-                        height: 200,
-                        width: 200,
-                        color: AppColors.grey.withAlpha(77),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(
-                              Icons.error_outline,
-                              color: AppColors.white,
-                              size: 40,
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              'Resim yüklenemedi',
-                              style: AppTextStyles.body.copyWith(
-                                fontSize: 12,
+                      errorWidget: (context, url, error) {
+                        debugPrint('Resim yükleme hatası: $url - $error');
+                        
+                        if (url.contains('github.com') || url.contains('githubusercontent.com')) {
+                          Future.delayed(Duration.zero, () => 
+                            _loadGitHubImageWithFallback(context, url)
+                          );
+                        }
+                        
+                        return Container(
+                          height: 200,
+                          width: 200,
+                          color: AppColors.grey.withAlpha(77),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.error_outline,
                                 color: AppColors.white,
+                                size: 40,
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
+                              const SizedBox(height: 8),
+                              Text(
+                                'Resim yüklenemedi',
+                                style: AppTextStyles.body.copyWith(
+                                  fontSize: 12,
+                                  color: AppColors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -100,6 +124,15 @@ class FungyDetailDialog extends StatelessWidget {
   }
 
   Widget _buildDetailRow(String label, String value) {
+    String decodedValue = value
+        .replaceAll('&#x2F;', '/')
+        .replaceAll('&amp;', '&')
+        .replaceAll('&lt;', '<')
+        .replaceAll('&gt;', '>')
+        .replaceAll('&quot;', '"')
+        .replaceAll('&#x27;', "'")
+        .replaceAll('&#x5C;', '\\');
+    
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
       child: Column(
@@ -114,11 +147,101 @@ class FungyDetailDialog extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            value,
+            decodedValue,
             style: AppTextStyles.body.copyWith(fontSize: 14),
           ),
         ],
       ),
     );
+  }
+
+  void _loadGitHubImageWithFallback(BuildContext context, String url) {
+    try {
+      String decodedUrl = url
+          .replaceAll('&#x2F;', '/')
+          .replaceAll('&amp;', '&')
+          .replaceAll('&lt;', '<')
+          .replaceAll('&gt;', '>')
+          .replaceAll('&quot;', '"')
+          .replaceAll('&#x27;', "'")
+          .replaceAll('&#x5C;', '\\');
+          
+      if (decodedUrl.contains('github.com') && decodedUrl.contains('/blob/')) {
+        String rawUrl = decodedUrl
+            .replaceFirst('github.com', 'raw.githubusercontent.com')
+            .replaceFirst('/blob/', '/');
+        
+        debugPrint('Alternatif GitHub URL: $rawUrl');
+        
+        Image image = Image.network(
+          rawUrl,
+          height: 200,
+          width: 200,
+          fit: BoxFit.cover,
+          headers: const {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36',
+            'Accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
+          },
+          loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) return child;
+            return Container(
+              height: 200,
+              width: 200,
+              color: AppColors.grey.withAlpha(77),
+              child: const Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.highlight,
+                ),
+              ),
+            );
+          },
+          errorBuilder: (context, error, stackTrace) {
+            debugPrint('Alternatif resim yükleme hatası: $error');
+            return Container(
+              height: 200,
+              width: 200,
+              color: AppColors.grey.withAlpha(77),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.error_outline,
+                    color: AppColors.white,
+                    size: 40,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Resim yüklenemedi',
+                    style: AppTextStyles.body.copyWith(
+                      fontSize: 12,
+                      color: AppColors.white,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+        
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            contentPadding: EdgeInsets.zero,
+            content: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: image,
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('Kapat'),
+              ),
+            ],
+          ),
+        );
+      }
+    } catch (e) {
+      debugPrint('GitHub resmi yükleme hatası: $e');
+    }
   }
 } 

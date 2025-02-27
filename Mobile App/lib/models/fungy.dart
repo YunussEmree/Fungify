@@ -17,12 +17,23 @@ class Fungy {
 
   factory Fungy.fromJson(Map<String, dynamic> json) {
     return Fungy(
-      id: json['id'] as int,
-      name: json['name'] as String,
-      probability: (json['probability'] as num).toDouble(),
-      venomous: json['venomous'] as bool,
-      fungyImageUrl: json['fungyImageUrl'] as String,
-      fungyDescription: json['fungyDescription'] as String,
+      id: json['id'] ?? 0,
+      name: _decodeHtmlEntities(json['name'] ?? ''),
+      probability: (json['probability'] ?? 0.0).toDouble(),
+      venomous: json['venomous'] ?? false,
+      fungyImageUrl: json['fungyImageUrl'] ?? '',
+      fungyDescription: _decodeHtmlEntities(json['fungyDescription'] ?? ''),
     );
+  }
+
+  static String _decodeHtmlEntities(String text) {
+    return text
+        .replaceAll('&#x2F;', '/')
+        .replaceAll('&amp;', '&')
+        .replaceAll('&lt;', '<')
+        .replaceAll('&gt;', '>')
+        .replaceAll('&quot;', '"')
+        .replaceAll('&#x27;', "'")
+        .replaceAll('&#x5C;', '\\');
   }
 } 
