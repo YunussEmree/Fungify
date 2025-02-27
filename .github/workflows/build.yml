@@ -42,15 +42,18 @@ jobs:
         if [ -d "Backend" ] && [ -f "Backend/mvnw" ]; then
           cd Backend
           chmod +x ./mvnw
-          ./mvnw clean package
+          export MAVEN_OPTS="-Dmaven.wagon.http.timeout=300000 -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.retryHandler.count=3"
+          ./mvnw clean package -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
         elif [ -f "mvnw" ]; then
           chmod +x ./mvnw
-          ./mvnw clean package
+          export MAVEN_OPTS="-Dmaven.wagon.http.timeout=300000 -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.retryHandler.count=3"
+          ./mvnw clean package -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
         else
           echo "Cannot find mvnw file"
           exit 1
         fi
       continue-on-error: true
+      timeout-minutes: 10
 
     # Mobile Build (Flutter)
     - name: Setup Flutter
