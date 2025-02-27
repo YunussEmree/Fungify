@@ -1,0 +1,43 @@
+name: Build Fungify
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # Backend Build (Spring Boot)
+    - name: Setup Java environment
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '11'
+    - name: Build Spring Boot app
+      run: ./mvnw clean package  # veya gradlew clean build, projenize göre
+
+    # Mobile Build (Flutter)
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.7.0'  # İhtiyacınıza uygun Flutter sürümü
+    - name: Get Flutter dependencies
+      run: flutter pub get
+    - name: Build APK (Release)
+      run: flutter build apk --release
+
+    # Artifacts'ı yükle
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: Fungify-Builds
+        path: |
+          Backend/target/*.jar
+          build/app/outputs/flutter-apk/*.apk
