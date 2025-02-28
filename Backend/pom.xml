@@ -86,7 +86,7 @@
 			<groupId>net.zetetic</groupId>
 			<artifactId>android-database-sqlcipher</artifactId>
 			<version>4.5.3</version>
-			<scope>system</scope>
+			<scope>provided</scope>
 			<optional>true</optional>
 		</dependency>
 
