@@ -14,6 +14,7 @@ The project's objective is to create a mobile application that utilizes artifici
   + Spring Boot Web for web application
   + Lombok for more clean code
   + JDBC for access to database
+  + Mockito for unit tests
 + Database
   + SQLite 
 + Mobile Application
