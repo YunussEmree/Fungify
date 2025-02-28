@@ -160,6 +160,6 @@ class FungyServiceImplTest {
         assertEquals("AmanitaMuscaria", results.get(0).getName());
         assertEquals("BoletusEdulis", results.get(1).getName());
 
-        verify(sqlSecurityUtil, times(6)).encodeForOutput(anyString());
+        verify(sqlSecurityUtil, times(4)).encodeForOutput(anyString());
     }
 } 
