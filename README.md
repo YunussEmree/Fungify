@@ -38,14 +38,11 @@ The project's objective is to create a mobile application that utilizes artifici
 <img src="https://github.com/user-attachments/assets/00b59651-6323-4daf-8e61-87818790e166" alt="Fungify_search" width=200 height=300>
 
 
-# To Do List
-[✔] Analyse of requirement (Techs/Algorithms/Datasets) <br>
-[✔] Preparing for Mobile app (Learning flutter) <br>
-[✔] Preparing data set <br>
-[✔] Training ai model <br>
-[✔] Preparing sqllite database <br>
-[✔] Coding mobile app <br>
-[✔] Coding web service <br>
-[✔] Optimizations  <br>
-[X] Ai model improvements <br>
-[X] Publishing app <br>
+# To Do's
+- Database will change to mongodb
+- Spring Security will be integrated
+- Mobile app should be recode for clean code principles
+- New tests will be written
+- RabbitMQ will be integrated
+- AI model will be changed
+- Publish
