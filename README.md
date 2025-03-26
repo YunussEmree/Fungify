@@ -30,7 +30,7 @@ The project's objective is to create a mobile application that utilizes artifici
   + Postman is used for tests
   + Github Actions for CI/CD
  
-# Mobil App Showcase
+# Mobile App Showcase
 
 <img src="https://github.com/user-attachments/assets/a9943da6-cf46-4960-a2aa-b689ae990820" alt="Fungify_main" width=200 height=300>
 <img src="https://github.com/user-attachments/assets/cd855d5e-61f7-4cfe-9c47-7f0b49991d3f" alt="Fungify_gallery" width=200 height=300>
